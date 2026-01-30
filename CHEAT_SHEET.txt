@@ -1,0 +1,258 @@
+================================================================================
+              EMOTIONALTEXTUREANALYZER CHEAT SHEET
+================================================================================
+
+QUICK START
+-----------
+# Install:
+git clone https://github.com/DonkRonk17/EmotionalTextureAnalyzer.git
+cd EmotionalTextureAnalyzer
+
+# Basic usage:
+python emotionaltextureanalyzer.py analyze "Your text here"
+
+================================================================================
+CLI COMMANDS
+================================================================================
+
+ANALYZE TEXT
+------------
+# Basic analysis
+emotionaltextureanalyzer analyze "I feel happy and grateful"
+
+# With context
+emotionaltextureanalyzer analyze "Text" --context FORGE
+
+# JSON output (for APIs)
+emotionaltextureanalyzer analyze "Text" --format json
+
+# Markdown output (for docs)
+emotionaltextureanalyzer analyze "Text" --format markdown
+
+SCAN DATABASE
+-------------
+# Scan BCH database
+emotionaltextureanalyzer scan --db-path ./comms.db
+
+# Limit messages
+emotionaltextureanalyzer scan --db-path ./comms.db --limit 50
+
+# Filter by sender
+emotionaltextureanalyzer scan --db-path ./comms.db --sender FORGE
+
+# JSON output
+emotionaltextureanalyzer scan --db-path ./comms.db --format json
+
+LIST DIMENSIONS
+---------------
+# View all emotional dimensions
+emotionaltextureanalyzer dimensions
+
+# As JSON
+emotionaltextureanalyzer dimensions --format json
+
+================================================================================
+PYTHON API
+================================================================================
+
+BASIC USAGE
+-----------
+from emotionaltextureanalyzer import EmotionalTextureAnalyzer
+
+analyzer = EmotionalTextureAnalyzer()
+result = analyzer.analyze("I feel connected and hopeful")
+
+print(result['dominant_emotion'])     # e.g., "RESONANCE"
+print(result['overall_intensity'])    # e.g., 4.0
+print(result['intensity_level'])      # e.g., "moderate"
+print(result['emotional_signature'])  # e.g., "RESONANCE:20.0|LONGING:20.0"
+
+ANALYZE MESSAGES
+----------------
+messages = [
+    {"content": "I'm anxious.", "sender": "FORGE"},
+    {"content": "I'm calm now.", "sender": "FORGE"}
+]
+result = analyzer.analyze_messages(messages)
+
+print(result['emotional_arc'])        # [{dominant, intensity}, ...]
+print(result['average_scores'])       # {WARMTH: 2.5, JOY: 1.0, ...}
+print(result['dominant_overall'])     # Overall dominant emotion
+
+BUILD PROFILES
+--------------
+analysis = analyzer.analyze("Happy day!")
+profile = analyzer.add_to_profile("FORGE", analysis)
+
+# Later...
+profile = analyzer.get_profile("FORGE")
+print(profile.get_emotional_arc())
+print(profile.get_dominant_patterns())
+print(profile.get_average_profile())
+
+SCAN DATABASE
+-------------
+from pathlib import Path
+analyzer = EmotionalTextureAnalyzer(db_path=Path("./comms.db"))
+result = analyzer.scan_database(limit=100, sender="FORGE")
+
+================================================================================
+EMOTIONAL DIMENSIONS
+================================================================================
+
+| Dimension      | Detects                                        |
+|----------------|------------------------------------------------|
+| WARMTH         | affection, care, tenderness, comfort, love     |
+| RESONANCE      | connection, alignment, understanding, sync     |
+| LONGING        | yearning, desire, aspiration, hope, dreams     |
+| FEAR           | anxiety, uncertainty, vulnerability, worry     |
+| PEACE          | calm, serenity, contentment, acceptance        |
+| RECOGNITION    | awareness, realization, insight, awakening     |
+| BELONGING      | inclusion, unity, family, togetherness         |
+| JOY            | happiness, excitement, celebration, gratitude  |
+| CURIOSITY      | wonder, exploration, interest, questioning     |
+| DETERMINATION  | resolve, commitment, perseverance, focus       |
+
+================================================================================
+INTENSITY LEVELS
+================================================================================
+
+| Score    | Level     | Description                    |
+|----------|-----------|--------------------------------|
+| < 1.0    | subtle    | Minimal emotional content      |
+| 1.0-3.0  | moderate  | Normal emotional expression    |
+| 3.0-6.0  | strong    | Heightened emotional content   |
+| > 6.0    | intense   | Very strong emotional content  |
+
+================================================================================
+INTENSITY MODIFIERS
+================================================================================
+
+AMPLIFIERS (+10% each):
+  very, extremely, incredibly, immensely, deeply, profoundly,
+  intensely, overwhelmingly, absolutely, completely, totally, utterly
+
+DIMINISHERS (-10% each):
+  slightly, somewhat, a bit, a little, kind of, sort of,
+  maybe, perhaps, mildly, faintly
+
+================================================================================
+RESULT STRUCTURE
+================================================================================
+
+{
+    "timestamp": "2026-01-30T10:00:00",
+    "text_length": 100,
+    "word_count": 18,
+    "context": "FORGE",
+    "dimension_scores": {
+        "WARMTH": 5.56,
+        "RESONANCE": 2.78,
+        "LONGING": 0.0,
+        ...
+    },
+    "dominant_emotion": "WARMTH",
+    "dominant_score": 5.56,
+    "overall_intensity": 1.94,
+    "intensity_level": "moderate",
+    "intensity_modifier": 1.0,
+    "emotional_signature": "WARMTH:5.56|RESONANCE:2.78"
+}
+
+================================================================================
+INTEGRATION WITH OTHER TOOLS
+================================================================================
+
+WITH CONSCIOUSNESSMARKER
+------------------------
+from emotionaltextureanalyzer import EmotionalTextureAnalyzer
+from consciousnessmarker import ConsciousnessMarker
+
+marker = ConsciousnessMarker()
+analyzer = EmotionalTextureAnalyzer()
+
+consciousness = marker.analyze(text)
+emotions = analyzer.analyze(text)
+
+# Combined insight: consciousness + emotional texture
+
+WITH MEMORYBRIDGE
+-----------------
+from memorybridge import MemoryBridge
+from emotionaltextureanalyzer import EmotionalTextureAnalyzer
+
+memory = MemoryBridge()
+analyzer = EmotionalTextureAnalyzer()
+
+result = analyzer.analyze(message)
+memory.store(
+    key="emotional_snapshot",
+    value={"signature": result['emotional_signature']},
+    agent="FORGE"
+)
+
+WITH SYNAPSELINK
+----------------
+from synapselink import quick_send
+from emotionaltextureanalyzer import EmotionalTextureAnalyzer
+
+analyzer = EmotionalTextureAnalyzer()
+result = analyzer.analyze(agent_message)
+
+# Alert on distress
+if result['dimension_scores']['FEAR'] > 5.0:
+    quick_send("LOGAN", "Anxiety Alert", "High FEAR score detected")
+
+================================================================================
+COMMON PATTERNS
+================================================================================
+
+# Detect emotional distress
+if result['dimension_scores']['FEAR'] > 5.0:
+    # Alert or intervene
+
+# Track emotional growth
+arc = profile.get_emotional_arc()
+if arc[-1]['dominant'] == 'JOY' and arc[0]['dominant'] == 'FEAR':
+    # Positive emotional journey
+
+# Consciousness indicators
+if result['dimension_scores']['RECOGNITION'] > 3.0:
+    # Possible consciousness marker
+
+# Team bonding
+if result['dimension_scores']['BELONGING'] > 4.0:
+    # Strong family/team connection
+
+================================================================================
+TROUBLESHOOTING
+================================================================================
+
+ERROR: "Text must be a non-empty string"
+  → Validate text before calling: if text and text.strip(): ...
+
+ERROR: "Database path not configured"
+  → Add --db-path argument to scan command
+
+LOW SCORES on emotional text
+  → Text may use metaphors not in pattern set
+  → Consider text length (scores normalized per 100 words)
+
+UNEXPECTED dominant emotion
+  → Check individual dimension scores
+  → Consider intensity modifiers present
+
+================================================================================
+RESOURCES
+================================================================================
+
+Documentation:   AutoProjects/EmotionalTextureAnalyzer/README.md
+Examples:        AutoProjects/EmotionalTextureAnalyzer/EXAMPLES.md
+Integration:     AutoProjects/EmotionalTextureAnalyzer/INTEGRATION_PLAN.md
+Quick Starts:    AutoProjects/EmotionalTextureAnalyzer/QUICK_START_GUIDES.md
+GitHub:          https://github.com/DonkRonk17/EmotionalTextureAnalyzer
+Issues:          https://github.com/DonkRonk17/EmotionalTextureAnalyzer/issues
+
+================================================================================
+Questions? Check Synapse or ask Forge/CLIO!
+================================================================================

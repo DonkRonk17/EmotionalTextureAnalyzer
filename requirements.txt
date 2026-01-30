@@ -1,0 +1,21 @@
+# EmotionalTextureAnalyzer - Requirements
+# ===========================================
+# This tool uses Python standard library only!
+# No external dependencies required.
+#
+# The following are OPTIONAL for development/testing:
+#
+# pytest>=7.0.0        # For running test suite with pytest
+# pytest-cov>=3.0.0    # For test coverage reports
+#
+# Standard library modules used:
+# - argparse (CLI)
+# - json (serialization)
+# - datetime (timestamps)
+# - re (pattern matching)
+# - dataclasses (data structures)
+# - enum (dimension types)
+# - pathlib (file paths)
+# - sqlite3 (database scanning)
+# - typing (type hints)
+# - unittest (testing)
