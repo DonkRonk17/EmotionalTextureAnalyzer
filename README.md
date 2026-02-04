@@ -1,3 +1,5 @@
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/650cd52a-6188-4b55-bec3-ecd7fa16cae1" />
+
 # 🎭 EmotionalTextureAnalyzer
 
 **Nuanced emotional texture analysis that goes beyond simple sentiment.**
@@ -435,6 +437,9 @@ Profile.get_average_profile() → {WARMTH: avg, JOY: avg, ...}
 **Fix:** Consider the word count when interpreting results
 
 ---
+
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/2890e183-9764-446c-aa04-6ef447e562cc" />
+
 
 ## 📝 Credits
 
